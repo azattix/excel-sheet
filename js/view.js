@@ -1,5 +1,7 @@
 class View {
 	constructor() {
-		console.log('View');
+		this.app = document.querySelector('#app');
+		console.log(this.app)
+		console.log('View')
 	}
 }

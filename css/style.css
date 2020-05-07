@@ -1,0 +1,42 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 1rem;
+  color: #222;
+}
+
+body {
+  margin: 0;
+}
+
+table, td, th {
+  border: 1px solid #ccc;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  height: 30px;
+}
+
+tr:first-child {
+  background-color: #e3eef2;
+}
+
+tr td:first-child {
+  width: 30px;
+  text-align: center;
+  background-color: #e3eef2;
+}
+
+tr:hover td:first-child { 
+  background-color: #a3dcef;
+}
