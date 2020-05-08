@@ -4,42 +4,26 @@ class View {
 		
 		this.table = this.createElement('table', 'table');
 		this.thead = this.createElement('thead');
+		this.colTitle = this.createElement('tr', 'col-title');
+		this.rowNumber = this.createElement('th', 'row-num');
+		this.rowNumber.textContent = '#';
 		this.tbody = this.createElement('tbody');
 
-		this.tr = this.getTitle();
-
-		this.thead.append(this.tr);
+		this.colTitle.append(this.rowNumber);
+		this.thead.append(this.colTitle);
 		this.table.append(this.thead, this.tbody);
 		this.app.append(this.table);
 	}
 
-	updateTitle() {
+	appendColTitle = (title) => {
+	 	let th = this.createElement('th');
+		th.textContent = title;
+		this.colTitle.append(th);
 	}
 
-	getTitle() {
-		// const header = ['#', 'A', 'B', 'C'];
-		const tr = this.createElement('tr', 'title');
-
-		// header.map(item => {
-		// 	const td = this.createElement('th');
-		// 	td.textContent = item;
-		// 	tr.append(td);
-		// });
-
-		for (let i = 1; i <= 15; i++) {
-			const title = this.convertToTitle(i);
-			const td = this.createElement('th');
-			td.textContent = title;
-			tr.append(td);
-		}
-
-		return tr;
+	removeColTitle = () => {
+		this.colTitle.removeChild(this.colTitle.lastElementChild);
 	}
-
-	convertToTitle(n) {
-  	if(n < 27) 
-      return String.fromCharCode(65 + n - 1);
-  }
 
 	createElement(tag, className) {
     const element = document.createElement(tag);
@@ -51,5 +35,11 @@ class View {
 
   getElement(selector) {
     return document.querySelector(selector);
+  }
+
+  bindColSize(handle) {
+  	window.addEventListener('scroll', () => {
+  		handle(this.table.getBoundingClientRect().x);
+  	});
   }
 }

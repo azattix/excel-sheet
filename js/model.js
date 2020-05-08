@@ -1,43 +1,36 @@
 class Model {
   constructor() {
-    this.data = [
-      ['Peter', 'Griffin', '$100'],
-      ['Lois', 'Griffin', '$100'],
-      ['Joe', 'Griffin', '$100'],
-      ['Cleveland', 'Griffin', '$100'],
-    ];
-    this.lastTitleId = 16;
+    this.lastColTitleId = 16;
+    this.cellWidth = 100;
+    this.commitX = this.cellWidth;
   }
 
-  convertToTitle(N) {
-  	// -1 for 0-based to 1-based indexing
-		return !N ? '' : this.convertToTitle(Math.floor(--N / 26)) + String.fromCharCode('A'.charCodeAt(0) + N % 26);
+  bindColSizeChanged(callback1, callback2) {
+    this.onColSizeGrow = callback1;
+    this.onColSizeReduce = callback2;
+  }
+
+  convertToTitle(n) {
+    // -1 for 0-based to 1-based indexing
+    let s = String.fromCharCode('A'.charCodeAt(0) + n % 26);
+		return !n ? '' : this.convertToTitle(Math.floor(--n / 26)) + s;
 	}
 
-  // convertToTitle(n) {
-  //   // if(n < 27) {
-  //   // 	this.lastTitleId++;
-  //   //    return String.fromCharCode(65 + n - 1);
-  //   // }
-
-  //   let s = [];
-
-  //   while (n-- > 0){
-  //     // s.append((char)(n % 26 + 'A'));
-  //     s.push(String.fromCharCode(n % 26 + 65)); 
-  //     n /= 26; 
-  //   }
-
-  //   return s.reverse().join('');
-  // }
-
-  titleToNumber(s) {
-    let output = 0;
-
-    for (let i = 0; i < s.length; i++) {
-      output = (output * 26) + s.charCodeAt(i) - 64;
+  setDefaultColSize() {
+    let i;
+    for (i = 1; i <= this.lastColTitleId; i++) {
+      this.onColSizeGrow(this.convertToTitle(i));
     }
+  }
 
-    return output;
+  resizeCols(x) {
+    if (parseInt(-x / this.commitX) === 1) {
+      this.onColSizeGrow(this.convertToTitle(this.lastColTitleId++));
+      this.commitX += this.cellWidth;
+    } 
+    else if (this.commitX + x > 100) {
+      this.onColSizeReduce();
+      this.commitX -= this.cellWidth;
+    }
   }
 }

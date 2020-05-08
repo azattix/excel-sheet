@@ -14,29 +14,39 @@ body {
   margin: 0;
 }
 
-table, td, th {
+table {
+  border-collapse: collapse;
+}
+
+table, 
+td, 
+th {
   border: 1px solid #ccc;
 }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  height: 30px;
-}
-
-tr:first-child {
+table thead {
+  color: #444;
   background-color: #e3eef2;
 }
 
-tr td:first-child {
+th, td {
+  min-width: 100px;
+  height: 25px;
+  font-weight: normal;
+}
+
+td input {
+  width: 100px;
+  border: none;
+  font-size: inherit;
+}
+
+.row-num {
   width: 30px;
   text-align: center;
   background-color: #e3eef2;
 }
 
-tr:hover td:first-child { 
+tbody tr:hover td:first-child {
   background-color: #a3dcef;
 }
