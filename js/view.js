@@ -1,3 +1,10 @@
+/**
+ * @class View
+ *
+ * Visual representation of the model.
+ *
+ * @param app
+ */
 class View {
 	constructor(app) {
 		this.app = this.getElement(app);
@@ -19,12 +26,18 @@ class View {
 	 	let th = this.createElement('th');
 		th.textContent = title;
 		this.colTitle.append(th);
-	}
+	};
 
 	removeColTitle = () => {
 		this.colTitle.removeChild(this.colTitle.lastElementChild);
-	}
+	};
 
+	/**
+	 *
+	 * @param tag
+	 * @param className
+	 * @returns {object}
+	 */
 	createElement(tag, className) {
     const element = document.createElement(tag);
 
@@ -33,11 +46,20 @@ class View {
     return element;
   }
 
-  getElement(selector) {
+	/**
+	 * Return DOM object
+	 * @param selector
+	 * @returns {object}
+	 */
+	getElement(selector) {
     return document.querySelector(selector);
   }
 
-  bindColSize(handle) {
+	/**
+	 * On scroll change the sheet columns size
+	 * @param handle
+	 */
+  bindSheetResize(handle) {
   	window.addEventListener('scroll', () => {
   		handle(this.table.getBoundingClientRect().x);
   	});

@@ -1,36 +1,66 @@
+/**
+ * @class Model
+ *
+ * Manages the data of the application.
+ */
 class Model {
   constructor() {
+    this.maxColSize = 100;
     this.lastColTitleId = 16;
     this.cellWidth = 100;
     this.commitX = this.cellWidth;
   }
 
-  bindColSizeChanged(callback1, callback2) {
+  /**
+   * Respond to callbacks in the model
+   * @param callback1
+   * @param callback2
+   */
+  bindSheetSizeChanged(callback1, callback2) {
     this.onColSizeGrow = callback1;
     this.onColSizeReduce = callback2;
   }
 
+  /**
+   * Return corresponding column title of given number.
+   * @param n
+   * @returns {string}
+   */
   convertToTitle(n) {
-    // -1 for 0-based to 1-based indexing
-    let s = String.fromCharCode('A'.charCodeAt(0) + n % 26);
-		return !n ? '' : this.convertToTitle(Math.floor(--n / 26)) + s;
+    let title = '';
+
+    while(n > 0) {
+      n--;
+      title += String.fromCharCode(65 + (n % 26));
+      n = Math.floor(n / 26);
+    }
+
+    return title.split('').reverse().join('');
 	}
 
-  setDefaultColSize() {
+  /**
+   * We must have initial number of columns when app is opened
+   */
+  setInitialSheet() {
     let i;
     for (i = 1; i <= this.lastColTitleId; i++) {
       this.onColSizeGrow(this.convertToTitle(i));
     }
   }
 
-  resizeCols(x) {
-    if (parseInt(-x / this.commitX) === 1) {
-      this.onColSizeGrow(this.convertToTitle(this.lastColTitleId++));
+  /**
+   * Change the number of columns increasingly or decreasingly
+   * @param x
+   */
+  resizeSheet(x) {
+    if ((-x / this.commitX) >= 1 && this.lastColTitleId <= this.maxColSize) {
+      this.onColSizeGrow(this.convertToTitle(++this.lastColTitleId));
       this.commitX += this.cellWidth;
-    } 
-    else if (this.commitX + x > 100) {
+    }
+    else if (this.commitX + x > this.cellWidth) {
       this.onColSizeReduce();
       this.commitX -= this.cellWidth;
+      this.lastColTitleId--;
     }
   }
 }

@@ -1,13 +1,31 @@
+/**
+ * Appends script to the body
+ * @param src
+ * @returns {Promise<Promise>}
+ */
 function loadScript(src) {
-	const script = document.createElement("SCRIPT");
-	script.src = src;
-	document.body.appendChild(script);  
+	return new Promise((resolve, reject) => {
+		let script = document.createElement('SCRIPT');
+		script.src = src;
+
+		script.onload = () => resolve(script);
+		script.onerror = () => reject(new Error(`Script load error for ${src}`));
+
+		document.head.append(script);
+	});
 }
 
+/**
+ * Main function to launch the app
+ */
 function ready() {
-	loadScript('js/model.js');
-	loadScript('js/view.js');
-	loadScript('js/controller.js');
-} 
+	loadScript('js/model.js')
+		.then(script => loadScript("js/view.js"))
+		.then(script => loadScript("js/controller.js"))
+		.then(script => {
+			// scripts are loaded, we can use functions declared there
+			console.log('scripts are loaded');
+		});
+}
 
 document.addEventListener("DOMContentLoaded", ready);
