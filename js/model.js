@@ -7,18 +7,22 @@ class Model {
   constructor() {
     this.maxColSize = 100;
     this.lastColTitleId = 16;
+    this.rowCount = 16;
     this.cellWidth = 100;
     this.commitX = this.cellWidth;
   }
 
   /**
    * Respond to callbacks in the model
-   * @param callback1
-   * @param callback2
+   * @param callback
    */
-  bindSheetSizeChanged(callback1, callback2) {
-    this.onColSizeGrow = callback1;
-    this.onColSizeReduce = callback2;
+  bindSheetSizeChanged(callback) {
+    this.onColSizeGrow = callback.appendColTitle;
+    this.onColSizeReduce = callback.removeColTitle;
+    this.onRawSizeGrow = callback.appendCol;
+    this.onGrowAddCol = callback.appendRowCol;
+    this.onRawColReduce = callback.removeRowCol;
+    this.onAppendRaw = callback.appendRaw;
   }
 
   /**
@@ -42,9 +46,15 @@ class Model {
    * We must have initial number of columns when app is opened
    */
   setInitialSheet() {
-    let i;
+    let i, j;
+
     for (i = 1; i <= this.lastColTitleId; i++) {
       this.onColSizeGrow(this.convertToTitle(i));
+      this.onAppendRaw();
+      // +1 for extra cell, first cell for numbers
+      for (j = 1; j <= this.lastColTitleId+1; j++) {
+        this.onRawSizeGrow(j);
+      }
     }
   }
 
@@ -55,9 +65,19 @@ class Model {
   resizeSheet(x) {
     if ((-x / this.commitX) >= 1 && this.lastColTitleId <= this.maxColSize) {
       this.onColSizeGrow(this.convertToTitle(++this.lastColTitleId));
+
+      for (let j = 0; j < this.rowCount; j++) {
+        this.onGrowAddCol(j);
+      }
+
       this.commitX += this.cellWidth;
     }
     else if (this.commitX + x > this.cellWidth) {
+
+      for (let j = 0; j < this.rowCount; j++) {
+        this.onRawColReduce(j);
+      }
+
       this.onColSizeReduce();
       this.commitX -= this.cellWidth;
       this.lastColTitleId--;

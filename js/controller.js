@@ -12,7 +12,14 @@ class Controller {
 		this.view = view;
 
 		// Explicit this binding
-		this.model.bindSheetSizeChanged(this.view.appendColTitle, this.view.removeColTitle);
+		this.model.bindSheetSizeChanged({
+			appendColTitle: this.view.appendColTitle,
+			removeColTitle: this.view.removeColTitle,
+			appendCol: this.view.appendCol,
+			appendRowCol: this.view.appendRowCol,
+			removeRowCol: this.view.removeRowCol,
+			appendRaw: this.view.appendRaw
+		});
 		this.view.bindSheetResize(this.onSheetResized);
 		this.model.setInitialSheet();
 	}
@@ -22,4 +29,4 @@ class Controller {
   }
 }
 
-new Controller(new Model(), new View('#app'));
+const app = new Controller(new Model(), new View('#app'));

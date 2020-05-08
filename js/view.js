@@ -22,6 +22,27 @@ class View {
 		this.app.append(this.table);
 	}
 
+	appendCol = (i) => {
+		let td = this.createElement('td');
+
+		if (i === 1) {
+			td.textContent = this.tbody.childNodes.length;
+			td.classList.add('raw-num');
+		}
+
+		this.tbody.lastChild.append(td);
+	};
+
+	appendRaw = () => {
+		let tr = this.createElement('tr');
+		this.tbody.append(tr);
+	};
+
+	appendRowCol = (i) => {
+		let td = this.createElement('td');
+		this.tbody.childNodes[i].append(td);
+	};
+
 	appendColTitle = (title) => {
 	 	let th = this.createElement('th');
 		th.textContent = title;
@@ -30,6 +51,10 @@ class View {
 
 	removeColTitle = () => {
 		this.colTitle.removeChild(this.colTitle.lastElementChild);
+	};
+
+	removeRowCol = (i) => {
+		this.tbody.childNodes[i].removeChild(this.tbody.childNodes[i].lastElementChild);
 	};
 
 	/**

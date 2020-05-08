@@ -18,10 +18,15 @@ table {
   border-collapse: collapse;
 }
 
-table, 
-td, 
+table,
+td,
 th {
   border: 1px solid #ccc;
+}
+
+td,
+th {
+  padding: 3px;
 }
 
 table thead {
@@ -29,24 +34,15 @@ table thead {
   background-color: #e3eef2;
 }
 
-th, td {
+th:not(:first-child) {
   min-width: 100px;
-  height: 25px;
-  font-weight: normal;
-}
-
-td input {
-  width: 100px;
-  border: none;
-  font-size: inherit;
-}
-
-.row-num {
-  width: 30px;
-  text-align: center;
-  background-color: #e3eef2;
 }
 
 tbody tr:hover td:first-child {
   background-color: #a3dcef;
+}
+
+tr td:first-child {
+  text-align: center;
+  background-color: #e3eef2;
 }
