@@ -53,6 +53,10 @@ class View {
 		})
 	};
 
+	removeLastRow = () => {
+		this.tbody.removeChild(this.tbody.lastChild);
+	};
+
 	/**
 	 *
 	 * @param tag
@@ -83,6 +87,7 @@ class View {
   bindSheetResize(handle) {
   	window.addEventListener('scroll', () => {
   		handle(this.table.getBoundingClientRect());
+  		console.log(this.table.getBoundingClientRect())
   	});
   }
 }

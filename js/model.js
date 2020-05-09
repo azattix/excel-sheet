@@ -6,10 +6,13 @@
 class Model {
   constructor() {
     this.maxColSize = 100;
-    this.colSize = 26;
+    this.maxRowSize = 100;
+    this.colSize = 20;
     this.rowSize = 30;
     this.cellWidth = 70;
+    this.cellHeight = 23;
     this.commitX = this.cellWidth;
+    this.commitY = this.cellHeight;
   }
 
   /**
@@ -59,8 +62,10 @@ class Model {
   /**
    * Change the number of columns increasingly or decreasingly
    * @param x
+   * @param y
    */
-  resizeSheet({ x }) {
+  resizeSheet({ x, y }) {
+    // horizontal scroll
     if ((-x / this.commitX) >= 1 && this.colSize <= this.maxColSize) {
       this.$.appendColTitle(this.convertToTitle(++this.colSize));
       this.$.appendCols();
@@ -71,6 +76,24 @@ class Model {
       this.$.removeColTitle();
       this.commitX -= this.cellWidth;
       this.colSize--;
+    }
+
+    // vertical scroll
+    if ((-y / this.commitY) >= 1 && this.rowSize <= this.maxRowSize) {
+      this.$.appendRaw();
+      for (let j = 1; j <= this.colSize+1; j++) { // +1 for extra cell for numbers
+        this.$.appendCol();
+      }
+      this.$.assignRawNumber(this.rowSize);
+      this.commitY += this.cellHeight;
+      this.rowSize++;
+    }
+    else if (this.commitY + y >= this.cellHeight || y === 0) {
+      for (let i = 0; i < (this.commitY / -y); i++) {
+        this.$.removeLastRow();
+        this.commitY -= this.cellHeight;
+        this.rowSize--;
+      }
     }
   }
 }
