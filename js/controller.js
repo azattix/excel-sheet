@@ -23,9 +23,11 @@ class Controller {
 			removeLastRow: this.view.removeLastRow,
 			setActiveCell: this.view.setActiveCell,
 		});
+
+		this.model.setInitialSheet();
 		this.view.bindSheetResize(this.onSheetResized);
 		this.view.bindSetActiveCell();
-		this.model.setInitialSheet();
+		this.view.bindDoubleClick();
 	}
 
 	onSheetResized = x => {

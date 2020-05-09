@@ -94,23 +94,51 @@ class View {
   bindSheetResize(handle) {
   	window.addEventListener('scroll', () => {
   		handle(this.table.getBoundingClientRect());
-  		console.log(this.table.getBoundingClientRect())
+  		// console.log(this.table.getBoundingClientRect())
   	});
   }
 
+  setActive = (e) => {
+		if (e.target.classList.contains('row-num')) return;
+		if (e.target.classList.contains('active-cell')) return;
+
+		if (e.target.tagName === 'TD') {
+			const activeCell = document.querySelectorAll('.active-cell');
+
+			activeCell.forEach(active => {
+				active.classList.remove('active-cell')
+			});
+
+			e.target.classList.add('active-cell'); // clicked cell
+			e.target.parentElement.firstElementChild.classList.add('active-cell'); // row number
+			this.thead.childNodes[e.target.cellIndex].classList.add('active-cell'); // title
+		}
+	};
+
 	bindSetActiveCell() {
-		this.tbody.addEventListener('click', (e) => {
-			if (e.target.tagName === 'TD' && !e.target.classList.contains('row-num')) {
-				const activeCell = document.querySelectorAll('.active-cell');
+		this.tbody.addEventListener('click', this.setActive);
+	}
 
-				activeCell.forEach(active => {
-					active.classList.remove('active-cell')
-				});
+	bindDoubleClick() {
+  	this.tbody.addEventListener('dblclick', (e) => {
+  		if (e.target.children.length) return;
 
-				e.target.classList.add('active-cell'); // clicked cell
-				e.target.parentElement.firstElementChild.classList.add('active-cell'); // row number
-				this.thead.childNodes[e.target.cellIndex].classList.add('active-cell'); // title
-			}
-		});
+  		let input = this.createElement('input', 'input-item');
+  		input.type = 'text';
+  		e.target.append(input);
+  		input.focus();
+
+			input.addEventListener('focus', () => {
+				this.setActive(e);
+			});
+
+  		input.addEventListener('blur', () => {
+  			if (input.value === '') {
+  				input.removeEventListener('focus', () => console.log('focus event removed'));
+					input.removeEventListener('blur', () => console.log('blur event removed'));
+					e.target.removeChild(e.target.lastChild);
+				}
+			});
+		})
 	}
 }

@@ -7,7 +7,6 @@
 html {
   font-family: sans-serif;
   font-size: 14px;
-  /*   color: #222; */
 }
 
 body {
@@ -15,6 +14,7 @@ body {
 }
 
 table {
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -24,13 +24,18 @@ th {
   border: 1px solid #ccc;
 }
 
-td,
-th {
-  padding: 3px;
+td:not(:first-child),
+th:not(:first-child) {
+  /* width: 70px; */
+  min-width: 70px;
+  height: 23px;
+  min-height: 23px;
+  max-height: 23px;
+  max-width: 70px;
+  white-space: nowrap;
 }
 
 table thead {
-  /* color: #444; */
   background-color: #e3eef2;
   font-weight: normal;
 }
@@ -39,15 +44,19 @@ table thead th {
   font-weight: normal;
 }
 
-th:not(:first-child) {
-  min-width: 70px;
-}
-
 tr td:first-child {
   text-align: center;
   background-color: #e3eef2;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .active-cell {
   box-shadow: 0 0 0 1px #444 inset;
+}
+
+.input-item {
+  width: 67px;
+  border: none;
+  height: 20px;
 }
