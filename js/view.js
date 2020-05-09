@@ -9,12 +9,21 @@ class View {
 	constructor(app) {
 		this.app = this.getElement(app);
 
+		this.commandLine = this.createElement('div');
+		this.inputSearch = this.createElement('input');
+		this.inputMirror = this.createElement('input');
+
+		this.inputSearch.type = 'text';
+		this.inputSearch.value = 'A1';
+		this.inputMirror.type = 'text';
+
 		this.table = this.createElement('table');
 		this.thead = this.createElement('thead');
 		this.tbody = this.createElement('tbody');
 
+		this.commandLine.append(this.inputSearch, this.inputMirror);
 		this.table.append(this.thead, this.tbody);
-		this.app.append(this.table);
+		this.app.append(this.commandLine, this.table);
 	}
 
 	appendRaw = () => {
@@ -103,6 +112,14 @@ class View {
 		if (e.target.classList.contains('active-cell')) return;
 
 		if (e.target.tagName === 'TD') {
+			let colTitle = this.thead.childNodes[e.target.cellIndex];
+			let rowNumber = e.target.parentElement.firstElementChild;
+
+			this.inputSearch.value = colTitle.textContent + rowNumber.textContent;
+			// this.inputMirror.value = e.target.textContent;
+			// if (!e.target.textContent) this.inputMirror.value = '';
+			// console.log(e.target.textContent);
+
 			const activeCell = document.querySelectorAll('.active-cell');
 
 			activeCell.forEach(active => {
@@ -110,8 +127,8 @@ class View {
 			});
 
 			e.target.classList.add('active-cell'); // clicked cell
-			e.target.parentElement.firstElementChild.classList.add('active-cell'); // row number
-			this.thead.childNodes[e.target.cellIndex].classList.add('active-cell'); // title
+			rowNumber.classList.add('active-cell');
+			colTitle.classList.add('active-cell');
 		}
 	};
 
@@ -129,16 +146,40 @@ class View {
   		input.focus();
 
 			input.addEventListener('focus', () => {
+				this.inputMirror.value = input.value;
 				this.setActive(e);
 			});
 
+			input.addEventListener('keyup', () => {
+				this.inputMirror.value = input.value;
+			});
+
   		input.addEventListener('blur', () => {
-  			if (input.value === '') {
+				this.inputMirror.value = '';
+
+				if (input.value === '') {
   				input.removeEventListener('focus', () => console.log('focus event removed'));
 					input.removeEventListener('blur', () => console.log('blur event removed'));
+					input.removeEventListener('keyup', () => console.log('keyup event removed'));
 					e.target.removeChild(e.target.lastChild);
 				}
 			});
 		})
 	}
 }
+
+// class Document {
+// 	createElement(tag, className) {
+// 		const element = document.createElement(tag);
+//
+// 		if (className) element.classList.add(className);
+//
+// 		return element;
+// 	}
+// }
+//
+// class Mirror extends Document {
+// 	constructor() {
+// 		this.input = this.createElement('input', 'mirror');
+// 	}
+// }
