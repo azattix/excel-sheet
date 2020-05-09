@@ -8,54 +8,49 @@
 class View {
 	constructor(app) {
 		this.app = this.getElement(app);
-		
-		this.table = this.createElement('table', 'table');
+
+		this.table = this.createElement('table');
 		this.thead = this.createElement('thead');
-		this.colTitle = this.createElement('tr', 'col-title');
-		this.rowNumber = this.createElement('th', 'row-num');
-		this.rowNumber.textContent = '#';
 		this.tbody = this.createElement('tbody');
 
-		this.colTitle.append(this.rowNumber);
-		this.thead.append(this.colTitle);
 		this.table.append(this.thead, this.tbody);
 		this.app.append(this.table);
 	}
-
-	appendCol = () => {
-		let td = this.createElement('td');
-		this.tbody.lastChild.append(td);
-	};
 
 	appendRaw = () => {
 		let tr = this.createElement('tr');
 		this.tbody.append(tr);
 	};
 
-	appendColByRawId = (i) => {
+	appendCol = () => {
 		let td = this.createElement('td');
-		this.tbody.childNodes[i].append(td);
+		this.tbody.lastChild.append(td);
+	};
+
+	appendCols = () => {
+		this.tbody.childNodes.forEach(col => {
+			col.append(this.createElement('td'));
+		})
 	};
 
 	appendColTitle = (title) => {
 		let th = this.createElement('th');
 		th.textContent = title;
-		this.colTitle.append(th);
+		this.thead.append(th);
 	};
 
 	assignRawNumber = (i) => {
-		this.tbody.childNodes[i-1].firstElementChild.textContent = i;
-		this.tbody.childNodes[i-1].classList.add('raw-num');
+		this.tbody.lastChild.firstElementChild.textContent = i;
 	};
-
-
 
 	removeColTitle = () => {
-		this.colTitle.removeChild(this.colTitle.lastElementChild);
+		this.thead.removeChild(this.thead.lastChild);
 	};
 
-	removeRowCol = (i) => {
-		this.tbody.childNodes[i].removeChild(this.tbody.childNodes[i].lastElementChild);
+	removeLastCol = () => {
+		this.tbody.childNodes.forEach(col => {
+			col.removeChild(col.lastChild);
+		})
 	};
 
 	/**

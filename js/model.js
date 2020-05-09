@@ -38,19 +38,18 @@ class Model {
 	}
 
   /**
-   * We must have initial number of columns when app is opened
+   * We must have initial number of columns and raws when app is launched
    */
   setInitialSheet() {
     let i, j;
 
-    for (i = 1; i <= this.colSize; i++) {
+    for (i = 0; i <= this.colSize; i++) {
       this.$.appendColTitle(this.convertToTitle(i));
     }
 
-    for (i = 1; i <= this.rowSize; i++) {
+    for (i = 1; i <= this.rowSize; i++) { // +1 for extra raw for titles
       this.$.appendRaw();
-      // +1 for extra cell, first cell for numbers
-      for (j = 1; j <= this.colSize+1; j++) {
+      for (j = 1; j <= this.colSize+1; j++) { // +1 for extra cell for numbers
         this.$.appendCol();
       }
       this.$.assignRawNumber(i);
@@ -64,19 +63,11 @@ class Model {
   resizeSheet({ x }) {
     if ((-x / this.commitX) >= 1 && this.colSize <= this.maxColSize) {
       this.$.appendColTitle(this.convertToTitle(++this.colSize));
-
-      for (let j = 0; j < this.rowSize; j++) {
-        this.$.appendColByRawId(j);
-      }
-
+      this.$.appendCols();
       this.commitX += this.cellWidth;
     }
     else if (this.commitX + x > this.cellWidth) {
-
-      for (let j = 0; j < this.rowSize; j++) {
-        this.$.removeRowCol(j);
-      }
-
+      this.$.removeLastCol();
       this.$.removeColTitle();
       this.commitX -= this.cellWidth;
       this.colSize--;

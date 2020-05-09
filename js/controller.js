@@ -16,8 +16,8 @@ class Controller {
 			appendColTitle: this.view.appendColTitle,
 			removeColTitle: this.view.removeColTitle,
 			appendCol: this.view.appendCol,
-			appendColByRawId: this.view.appendColByRawId,
-			removeRowCol: this.view.removeRowCol,
+			appendCols: this.view.appendCols,
+			removeLastCol: this.view.removeLastCol,
 			appendRaw: this.view.appendRaw,
 			assignRawNumber: this.view.assignRawNumber,
 		});
