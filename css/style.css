@@ -43,16 +43,11 @@ th:not(:first-child) {
   min-width: 70px;
 }
 
-tbody tr:hover td:first-child {
-  background-color: #a3dcef;
-}
-
 tr td:first-child {
   text-align: center;
   background-color: #e3eef2;
 }
 
-.activeCell,
-.activeTitle {
+.active-cell {
   box-shadow: 0 0 0 1px #444 inset;
 }

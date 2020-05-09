@@ -57,6 +57,8 @@ class Model {
       }
       this.$.assignRawNumber(i);
     }
+
+    this.$.setActiveCell();
   }
 
   /**

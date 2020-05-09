@@ -41,6 +41,7 @@ class View {
 
 	assignRawNumber = (i) => {
 		this.tbody.lastChild.firstElementChild.textContent = i;
+		this.tbody.lastChild.firstElementChild.classList.add('row-num');
 	};
 
 	removeColTitle = () => {
@@ -55,6 +56,12 @@ class View {
 
 	removeLastRow = () => {
 		this.tbody.removeChild(this.tbody.lastChild);
+	};
+
+	setActiveCell = () => {
+		this.thead.childNodes[1].classList.add('active-cell');
+		this.tbody.childNodes[0].children[0].classList.add('active-cell');
+		this.tbody.childNodes[0].children[1].classList.add('active-cell');
 	};
 
 	/**
@@ -90,4 +97,20 @@ class View {
   		console.log(this.table.getBoundingClientRect())
   	});
   }
+
+	bindSetActiveCell() {
+		this.tbody.addEventListener('click', (e) => {
+			if (e.target.tagName === 'TD' && !e.target.classList.contains('row-num')) {
+				const activeCell = document.querySelectorAll('.active-cell');
+
+				activeCell.forEach(active => {
+					active.classList.remove('active-cell')
+				});
+
+				e.target.classList.add('active-cell'); // clicked cell
+				e.target.parentElement.firstElementChild.classList.add('active-cell'); // row number
+				this.thead.childNodes[e.target.cellIndex].classList.add('active-cell'); // title
+			}
+		});
+	}
 }

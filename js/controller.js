@@ -20,9 +20,11 @@ class Controller {
 			removeLastCol: this.view.removeLastCol,
 			appendRaw: this.view.appendRaw,
 			assignRawNumber: this.view.assignRawNumber,
-			removeLastRow: this.view.removeLastRow
+			removeLastRow: this.view.removeLastRow,
+			setActiveCell: this.view.setActiveCell,
 		});
 		this.view.bindSheetResize(this.onSheetResized);
+		this.view.bindSetActiveCell();
 		this.model.setInitialSheet();
 	}
 
