@@ -22,14 +22,8 @@ class View {
 		this.app.append(this.table);
 	}
 
-	appendCol = (i) => {
+	appendCol = () => {
 		let td = this.createElement('td');
-
-		if (i === 1) {
-			td.textContent = this.tbody.childNodes.length;
-			td.classList.add('raw-num');
-		}
-
 		this.tbody.lastChild.append(td);
 	};
 
@@ -38,16 +32,23 @@ class View {
 		this.tbody.append(tr);
 	};
 
-	appendRowCol = (i) => {
+	appendColByRawId = (i) => {
 		let td = this.createElement('td');
 		this.tbody.childNodes[i].append(td);
 	};
 
 	appendColTitle = (title) => {
-	 	let th = this.createElement('th');
+		let th = this.createElement('th');
 		th.textContent = title;
 		this.colTitle.append(th);
 	};
+
+	assignRawNumber = (i) => {
+		this.tbody.childNodes[i-1].firstElementChild.textContent = i;
+		this.tbody.childNodes[i-1].classList.add('raw-num');
+	};
+
+
 
 	removeColTitle = () => {
 		this.colTitle.removeChild(this.colTitle.lastElementChild);
@@ -86,7 +87,7 @@ class View {
 	 */
   bindSheetResize(handle) {
   	window.addEventListener('scroll', () => {
-  		handle(this.table.getBoundingClientRect().x);
+  		handle(this.table.getBoundingClientRect());
   	});
   }
 }

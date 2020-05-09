@@ -6,9 +6,9 @@
 class Model {
   constructor() {
     this.maxColSize = 100;
-    this.lastColTitleId = 16;
-    this.rowCount = 16;
-    this.cellWidth = 100;
+    this.colSize = 26;
+    this.rowSize = 30;
+    this.cellWidth = 70;
     this.commitX = this.cellWidth;
   }
 
@@ -17,12 +17,7 @@ class Model {
    * @param callback
    */
   bindSheetSizeChanged(callback) {
-    this.onColSizeGrow = callback.appendColTitle;
-    this.onColSizeReduce = callback.removeColTitle;
-    this.onRawSizeGrow = callback.appendCol;
-    this.onGrowAddCol = callback.appendRowCol;
-    this.onRawColReduce = callback.removeRowCol;
-    this.onAppendRaw = callback.appendRaw;
+    this.$ = callback;
   }
 
   /**
@@ -48,13 +43,17 @@ class Model {
   setInitialSheet() {
     let i, j;
 
-    for (i = 1; i <= this.lastColTitleId; i++) {
-      this.onColSizeGrow(this.convertToTitle(i));
-      this.onAppendRaw();
+    for (i = 1; i <= this.colSize; i++) {
+      this.$.appendColTitle(this.convertToTitle(i));
+    }
+
+    for (i = 1; i <= this.rowSize; i++) {
+      this.$.appendRaw();
       // +1 for extra cell, first cell for numbers
-      for (j = 1; j <= this.lastColTitleId+1; j++) {
-        this.onRawSizeGrow(j);
+      for (j = 1; j <= this.colSize+1; j++) {
+        this.$.appendCol();
       }
+      this.$.assignRawNumber(i);
     }
   }
 
@@ -62,25 +61,25 @@ class Model {
    * Change the number of columns increasingly or decreasingly
    * @param x
    */
-  resizeSheet(x) {
-    if ((-x / this.commitX) >= 1 && this.lastColTitleId <= this.maxColSize) {
-      this.onColSizeGrow(this.convertToTitle(++this.lastColTitleId));
+  resizeSheet({ x }) {
+    if ((-x / this.commitX) >= 1 && this.colSize <= this.maxColSize) {
+      this.$.appendColTitle(this.convertToTitle(++this.colSize));
 
-      for (let j = 0; j < this.rowCount; j++) {
-        this.onGrowAddCol(j);
+      for (let j = 0; j < this.rowSize; j++) {
+        this.$.appendColByRawId(j);
       }
 
       this.commitX += this.cellWidth;
     }
     else if (this.commitX + x > this.cellWidth) {
 
-      for (let j = 0; j < this.rowCount; j++) {
-        this.onRawColReduce(j);
+      for (let j = 0; j < this.rowSize; j++) {
+        this.$.removeRowCol(j);
       }
 
-      this.onColSizeReduce();
+      this.$.removeColTitle();
       this.commitX -= this.cellWidth;
-      this.lastColTitleId--;
+      this.colSize--;
     }
   }
 }

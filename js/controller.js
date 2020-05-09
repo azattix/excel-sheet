@@ -16,9 +16,10 @@ class Controller {
 			appendColTitle: this.view.appendColTitle,
 			removeColTitle: this.view.removeColTitle,
 			appendCol: this.view.appendCol,
-			appendRowCol: this.view.appendRowCol,
+			appendColByRawId: this.view.appendColByRawId,
 			removeRowCol: this.view.removeRowCol,
-			appendRaw: this.view.appendRaw
+			appendRaw: this.view.appendRaw,
+			assignRawNumber: this.view.assignRawNumber,
 		});
 		this.view.bindSheetResize(this.onSheetResized);
 		this.model.setInitialSheet();
