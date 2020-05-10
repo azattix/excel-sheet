@@ -4,22 +4,24 @@
  * Manages the data of the application.
  */
 class Model {
-  constructor() {
-    this.maxColSize = 100;
-    this.maxRowSize = 100;
-    this.colSize = 20;
-    this.rowSize = 30;
-    this.cellWidth = 70;
-    this.cellHeight = 23;
-    this.commitX = this.cellWidth;
-    this.commitY = this.cellHeight;
+  constructor(data) {
+    this.extend(data)
+  }
+
+  extend = (data) => {
+    for (let key in data) {
+      Object.defineProperty(this, key, {
+        value: data[key],
+        writable: true
+      });
+    }
   }
 
   /**
    * Respond to callbacks in the model
    * @param callback
    */
-  bindSheetSizeChanged(callback) {
+  bindChanges(callback) {
     this.$ = callback;
   }
 

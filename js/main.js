@@ -1,5 +1,5 @@
 /**
- * Appends script to the body
+ * Appends script to the head
  * @param src
  * @returns {Promise<Promise>}
  */
@@ -23,6 +23,8 @@ function ready() {
 		.then(script => loadScript("js/view.js"))
 		.then(script => loadScript("js/controller.js"))
 		.then(script => {
+			loadScript("js/app.js");
+
 			// scripts are loaded, we can use functions declared there
 			console.log('scripts are loaded');
 		});

@@ -12,7 +12,7 @@ class Controller {
 		this.view = view;
 
 		// Explicit this binding
-		this.model.bindSheetSizeChanged({
+		this.model.bindChanges({
 			appendColTitle: this.view.appendColTitle,
 			removeColTitle: this.view.removeColTitle,
 			appendCol: this.view.appendCol,
@@ -35,4 +35,3 @@ class Controller {
   }
 }
 
-const app = new Controller(new Model(), new View('#app'));
