@@ -67,10 +67,18 @@ class View {
 		this.tbody.removeChild(this.tbody.lastChild);
 	};
 
-	setActiveCell = () => {
-		this.thead.childNodes[1].classList.add('active-cell');
-		this.tbody.childNodes[0].children[0].classList.add('active-cell');
-		this.tbody.childNodes[0].children[1].classList.add('active-cell');
+	setActiveCell = (col = 1, row = 0) => {
+		this.thead.childNodes[col].classList.add('active-cell');
+		this.tbody.childNodes[row].children[0].classList.add('active-cell');
+		this.tbody.childNodes[row].children[col].classList.add('active-cell');
+	};
+
+	disActiveCells = () => {
+		const activeCell = document.querySelectorAll('.active-cell');
+
+		activeCell.forEach(active => {
+			active.classList.remove('active-cell')
+		});
 	};
 
 	/**
@@ -116,15 +124,8 @@ class View {
 			let rowNumber = e.target.parentElement.firstElementChild;
 
 			this.inputSearch.value = colTitle.textContent + rowNumber.textContent;
-			// this.inputMirror.value = e.target.textContent;
-			// if (!e.target.textContent) this.inputMirror.value = '';
-			// console.log(e.target.textContent);
 
-			const activeCell = document.querySelectorAll('.active-cell');
-
-			activeCell.forEach(active => {
-				active.classList.remove('active-cell')
-			});
+			this.disActiveCells();
 
 			e.target.classList.add('active-cell'); // clicked cell
 			rowNumber.classList.add('active-cell');
@@ -158,28 +159,21 @@ class View {
 				this.inputMirror.value = '';
 
 				if (input.value === '') {
-  				input.removeEventListener('focus', () => console.log('focus event removed'));
-					input.removeEventListener('blur', () => console.log('blur event removed'));
-					input.removeEventListener('keyup', () => console.log('keyup event removed'));
 					e.target.removeChild(e.target.lastChild);
 				}
 			});
 		})
 	}
-}
 
-// class Document {
-// 	createElement(tag, className) {
-// 		const element = document.createElement(tag);
-//
-// 		if (className) element.classList.add(className);
-//
-// 		return element;
-// 	}
-// }
-//
-// class Mirror extends Document {
-// 	constructor() {
-// 		this.input = this.createElement('input', 'mirror');
-// 	}
-// }
+	bindColumnSearch(handle) {
+		this.inputSearch.addEventListener("keyup", (e) => {
+			// "Enter" key on the keyboard
+		  if (e.keyCode === 13) {
+				if (!this.inputSearch.value) return;
+				e.preventDefault();
+		    this.disActiveCells();
+		    handle(this.inputSearch.value);
+		  }
+		});
+	}
+}

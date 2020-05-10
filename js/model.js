@@ -15,7 +15,7 @@ class Model {
         writable: true
       });
     }
-  }
+  };
 
   /**
    * Respond to callbacks in the model
@@ -41,6 +41,35 @@ class Model {
 
     return title.split('').reverse().join('');
 	}
+
+  /**
+   * Return corresponding column number of given param
+   * @param s
+   * @returns {number}
+   */
+  titleToNumber(s) {
+    let output = 0;
+
+    for (let i = 0; i < s.length; i++) {
+      output = (output * 26) + s.charCodeAt(i) - 64;
+    }
+
+    return output;
+  }
+
+  splitNumberFromString(s) {
+    return s.match(/\d+/g)[0];
+  }
+
+  splitLetterFromString(s) {
+    return s.match(/[a-zA-Z]+/g)[0];
+  }
+
+  onSearchColumn(s) {
+    let row = this.splitNumberFromString(s);
+    let col = this.titleToNumber(this.splitLetterFromString(s));
+    this.$.setActiveCell(col, row-1);
+  };
 
   /**
    * We must have initial number of columns and raws when app is launched
