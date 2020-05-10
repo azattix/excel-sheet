@@ -9,13 +9,15 @@ class View {
 	constructor(app) {
 		this.app = this.getElement(app);
 
-		this.commandLine = this.createElement('div');
+		this.commandLine = this.createElement('div', 'input-group');
 		this.inputSearch = this.createElement('input');
 		this.inputMirror = this.createElement('input');
 
 		this.inputSearch.type = 'text';
 		this.inputSearch.value = 'A1';
+		this.inputSearch.setAttribute('id', 'column-search');
 		this.inputMirror.type = 'text';
+		this.inputMirror.setAttribute('id', 'mirror');
 
 		this.table = this.createElement('table');
 		this.thead = this.createElement('thead');
@@ -151,7 +153,12 @@ class View {
 				this.setActive(e);
 			});
 
-			input.addEventListener('keyup', () => {
+			input.addEventListener('keyup', (event) => {
+				// delete item
+				if (event.keyCode === 46) {
+					e.target.removeChild(e.target.lastChild);
+					return;
+				}
 				this.inputMirror.value = input.value;
 			});
 
