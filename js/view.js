@@ -70,10 +70,11 @@ class View {
 	};
 
 	setActiveCell = (col = 1, row = 0) => {
+		this.disActiveCells();
 		this.thead.childNodes[col].classList.add('active-cell');
 		this.tbody.childNodes[row].children[0].classList.add('active-cell');
 		this.tbody.childNodes[row].children[col].classList.add('active-cell');
-		this.activeCell = this.tbody.childNodes[row].children[col];
+		// this.activeCell = this.tbody.childNodes[row].children[col];
 	};
 
 	disActiveCells = () => {
@@ -185,11 +186,13 @@ class View {
 		});
 
 		this.inputSearch.addEventListener("keyup", (e) => {
+			e.preventDefault();
+
 			// "Enter" key on the keyboard
 		  if (e.keyCode === 13) {
 				if (!this.inputSearch.value) return;
-				e.preventDefault();
-		    this.disActiveCells();
+
+				this.inputSearch.value = this.inputSearch.value.toUpperCase();
 		    handle(this.inputSearch.value);
 		    this.inputSearch.blur();
 		  }

@@ -25,49 +25,67 @@ class Model {
 
   /**
    * Return corresponding column title of given number.
+   * Complexity: O(log(n) Space: O(1)
    * @param n
    * @returns {string}
    */
   convertToTitle(n) {
-    let title = '';
+    if (n <= 0) return "";
 
-    while(n > 0) {
-      n--;
-      title += String.fromCharCode(65 + (n % 26));
-      n = Math.floor(n / 26);
+    const character_offset = 64;
+    let columnTitle = "";
+
+    while (n > 0) {
+      let remainder = n % 26 === 0 ? 26 : n % 26;
+      n = (n - remainder) / 26;
+      columnTitle = String.fromCharCode(character_offset + remainder) + columnTitle;
     }
 
-    return title.split('').reverse().join('');
+    return columnTitle;
 	}
 
   /**
-   * Return corresponding column number of given param
+   * Return corresponding column number of given string
+   * Complexity: O(n) Space: O(1)
    * @param s
    * @returns {number}
    */
   titleToNumber(s) {
-    let output = 0;
+    let columnNumber = 0;
 
     for (let i = 0; i < s.length; i++) {
-      output = (output * 26) + s.charCodeAt(i) - 64;
+      columnNumber = (columnNumber * 26) + s.charCodeAt(i) - 64;
     }
 
-    return output;
+    return columnNumber;
   }
 
-  splitNumberFromString(s) {
-    return s.match(/\d+/g)[0];
-  }
-
-  splitLetterFromString(s) {
-    return s.match(/[a-zA-Z]+/g)[0];
-  }
-
+  /**
+   *
+   * @param s = {columnTitle:rowId}
+   */
   onSearchColumn(s) {
-    let row = this.splitNumberFromString(s);
-    let col = this.titleToNumber(this.splitLetterFromString(s));
-    this.$.setActiveCell(col, row-1);
-  };
+    if (s.trim().length < 2) return false;
+
+    const alphanumericRegex = /^[a-z0-9]+$/i;
+    const isAlphanumeric = alphanumericRegex.test(s.trim());
+
+    if (!isAlphanumeric) return false;
+
+    let alphaNumericArray = s.split(/([0-9]+)/); // split numbers from the string and remove last element
+
+    if (alphaNumericArray[0] === '') return false;
+    if (alphaNumericArray[1] === '') return false;
+    if (alphaNumericArray[2] !== '') return false;
+    if (alphaNumericArray[1] < '1') return false;
+
+    let col = this.titleToNumber(alphaNumericArray[0].toUpperCase());
+    let row = alphaNumericArray[1] - 1;
+
+    this.$.setActiveCell(col, row);
+
+    return true;
+  }
 
   /**
    * We must have initial number of columns and raws when app is launched
