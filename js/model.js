@@ -60,31 +60,21 @@ class Model {
     return columnNumber;
   }
 
-  /**
-   *
-   * @param s = {columnTitle:rowId}
-   */
   onSearchColumn(s) {
-    if (s.trim().length < 2) return false;
+    if (Test.isShortLength(s, 2)) return;
+    if (!Test.isAlphanumeric(s)) return;
 
-    const alphanumericRegex = /^[a-z0-9]+$/i;
-    const isAlphanumeric = alphanumericRegex.test(s.trim());
+    let alphaNumericArray = s.split(/([0-9]+)/);
 
-    if (!isAlphanumeric) return false;
-
-    let alphaNumericArray = s.split(/([0-9]+)/); // split numbers from the string and remove last element
-
-    if (alphaNumericArray[0] === '') return false;
-    if (alphaNumericArray[1] === '') return false;
-    if (alphaNumericArray[2] !== '') return false;
-    if (alphaNumericArray[1] < '1') return false;
+    if (Test.isEmpty(alphaNumericArray[0])) return;
+    if (Test.isEmpty(alphaNumericArray[1])) return;
+    if (!Test.isEmpty(alphaNumericArray[2])) return;
+    if (alphaNumericArray[1] < '1') return;
 
     let col = this.titleToNumber(alphaNumericArray[0].toUpperCase());
     let row = alphaNumericArray[1] - 1;
 
     this.$.setActiveCell(col, row);
-
-    return true;
   }
 
   /**

@@ -21,6 +21,7 @@ function loadScript(src) {
 function ready() {
 	loadScript('js/model.js')
 		.then(script => loadScript("js/view.js"))
+		.then(script => loadScript("js/test.js"))
 		.then(script => loadScript("js/controller.js"))
 		.then(script => {
 			// scripts are loaded, we can use functions declared there
