@@ -73,6 +73,7 @@ class View {
 		this.thead.childNodes[col].classList.add('active-cell');
 		this.tbody.childNodes[row].children[0].classList.add('active-cell');
 		this.tbody.childNodes[row].children[col].classList.add('active-cell');
+		this.activeCell = this.tbody.childNodes[row].children[col];
 	};
 
 	disActiveCells = () => {
@@ -83,12 +84,6 @@ class View {
 		});
 	};
 
-	/**
-	 *
-	 * @param tag
-	 * @param className
-	 * @returns {object}
-	 */
 	createElement(tag, className) {
     const element = document.createElement(tag);
 
@@ -97,27 +92,11 @@ class View {
     return element;
   }
 
-	/**
-	 * Return DOM object
-	 * @param selector
-	 * @returns {object}
-	 */
 	getElement(selector) {
     return document.querySelector(selector);
   }
 
-	/**
-	 * On scroll change the sheet columns size
-	 * @param handle
-	 */
-  bindSheetResize(handle) {
-  	window.addEventListener('scroll', () => {
-  		handle(this.table.getBoundingClientRect());
-  		// console.log(this.table.getBoundingClientRect())
-  	});
-  }
-
-  setActive = (e) => {
+	setActive = (e) => {
 		if (e.target.classList.contains('row-num')) return;
 		if (e.target.classList.contains('active-cell')) return;
 
@@ -135,8 +114,35 @@ class View {
 		}
 	};
 
+	/**
+	 * On scroll change the sheet columns size
+	 * @param handle
+	 */
+  bindSheetResize(handle) {
+  	window.addEventListener('scroll', () => {
+  		handle(this.table.getBoundingClientRect());
+  	});
+  }
+
 	bindSetActiveCell() {
 		this.tbody.addEventListener('click', this.setActive);
+	}
+
+	bindMirror() {
+  	// let input;
+		//
+  	// this.inputMirror.addEventListener('keyup', () => {
+		// 	if (this.activeCell.children.length === 0) {
+		// 		input = this.createElement('input', 'input-item');
+		// 		input.type = 'text';
+		// 		this.activeCell.append(input);
+		// 	}
+		// 	input.value = this.inputMirror.value;
+		// });
+		//
+		// this.inputMirror.addEventListener('blur', () => {
+		// 	input = null;
+		// });
 	}
 
 	bindDoubleClick() {
@@ -173,6 +179,11 @@ class View {
 	}
 
 	bindColumnSearch(handle) {
+		// Select all text inside of input
+		this.inputSearch.addEventListener('click', () => {
+			this.inputSearch.setSelectionRange(0, this.inputSearch.value.length);
+		});
+
 		this.inputSearch.addEventListener("keyup", (e) => {
 			// "Enter" key on the keyboard
 		  if (e.keyCode === 13) {
@@ -180,6 +191,7 @@ class View {
 				e.preventDefault();
 		    this.disActiveCells();
 		    handle(this.inputSearch.value);
+		    this.inputSearch.blur();
 		  }
 		});
 	}

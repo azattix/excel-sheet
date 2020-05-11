@@ -29,6 +29,7 @@ class Controller {
 		this.view.bindColumnSearch(this.onColumnSearch);
 		this.view.bindSetActiveCell();
 		this.view.bindDoubleClick();
+		this.view.bindMirror();
 	}
 
 	onSheetResized = x => {
