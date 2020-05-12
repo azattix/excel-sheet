@@ -35,6 +35,7 @@ th:not(:first-child) {
   max-width: 70px;
   white-space: nowrap;
   overflow: hidden;
+  /* padding-left: 3px; */
 }
 
 table thead {
@@ -61,6 +62,8 @@ tr td:first-child {
   width: 67px;
   border: none;
   height: 20px;
+  outline: none;
+  padding-left: 3px;
 }
 
 #column-search {
@@ -92,4 +95,12 @@ tr td:first-child {
   padding-left: 5px;
   padding-right: 5px;
   outline: none;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: inline-block;
 }

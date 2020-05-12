@@ -73,6 +73,7 @@ class View {
 		this.tbody.childNodes[row].children[0].classList.add('active-cell');
 		this.tbody.childNodes[row].children[col].classList.add('active-cell');
 		this.currentCell = this.tbody.childNodes[row].children[col];
+		this.commandLine.setVal(this.currentCell.textContent);
 	};
 
 	disActiveCells = () => {
@@ -96,30 +97,32 @@ class View {
   }
 
 	setActive = (e) => {
-		if (e.target.classList.contains('row-num')) return;
-		if (e.target.classList.contains('active-cell')) return;
+		let elem = e.target;
 
-		if (e.target.tagName === 'TD') {
-			let colTitle = this.thead.childNodes[e.target.cellIndex];
-			let rowNumber = e.target.parentElement.firstElementChild;
+		if (elem.classList.contains('row-num')) return;
+		if (elem.classList.contains('active-cell')) return;
+		if (elem.tagName === 'SPAN') elem = elem.parentElement;
+		if (elem.tagName === 'TD') {
+			let colTitle = this.thead.childNodes[elem.cellIndex];
+			let rowNumber = elem.parentElement.firstElementChild;
 
-			this.rowIndex = e.target.parentElement.rowIndex;
-			this.colIndex = e.target.cellIndex;
+			this.rowIndex = elem.parentElement.rowIndex;
+			this.colIndex = elem.cellIndex;
 			this.currentCell = this.tbody.childNodes[this.rowIndex].childNodes[this.colIndex];
 
 			this.navigator.setVal(colTitle.textContent + rowNumber.textContent);
-			this.commandLine.setVal('');
 
 			this.disActiveCells();
 
-			e.target.classList.add('active-cell'); // clicked cell
+			elem.classList.add('active-cell'); // clicked cell
 			rowNumber.classList.add('active-cell');
 			colTitle.classList.add('active-cell');
 		}
 
-		if (e.target.tagName === 'INPUT') {
-			this.commandLine.setVal(e.target.value);
-		}
+		if (elem.tagName === 'INPUT')
+			this.commandLine.setVal(elem.value);
+		else
+			this.commandLine.setVal(elem.textContent);
 	};
 
   bindSheetResize(handle) {
@@ -134,32 +137,36 @@ class View {
 
 	bindDoubleClick() {
   	this.tbody.addEventListener('dblclick', (e) => {
-  		if (e.target.children.length) return;
+			if (!hasChildren(e) && hasTag(e, 'TD')) {
+				let value = this.createElement('span', 'hide');
+				let input = this.createElement('input', 'input-item');
+				input.type = 'text';
 
-  		let input = this.createElement('input', 'input-item');
-  		input.type = 'text';
-  		e.target.append(input);
-  		input.focus();
+				e.target.append(value, input);
 
-			input.addEventListener('focus', () => {
-				this.setActive(e);
-			});
+				input.focus();
 
-			input.addEventListener('keyup', (event) => {
-				// delete item
-				if (event.keyCode === 46) {
-					e.target.removeChild(e.target.lastChild);
-					this.commandLine.setVal('');
-					return;
-				}
-				this.commandLine.setVal(input.value);
-			});
+				input.addEventListener('keyup', () => {
+					this.commandLine.setVal(input.value);
+				});
 
-  		input.addEventListener('blur', () => {
-				if (input.value === '') {
-					e.target.removeChild(e.target.lastChild);
-				}
-			});
+				input.addEventListener('blur', () => {
+					if (isEmpty(input.value)) {
+						e.target.textContent = '';
+					} else {
+						input.type = 'hidden';
+						value.textContent = input.value;
+						value.classList.remove('hide');
+					}
+				});
+
+			} else if ( hasTag(e,'SPAN') ) {
+				e.target.classList.add('hide');
+				e.target.nextElementSibling.type = 'text';
+			} else if ( hasTag(e, 'TD')) {
+				e.target.firstElementChild.classList.add('hide');
+				e.target.lastElementChild.type = 'text';
+			}
 		})
 	}
 
@@ -169,36 +176,36 @@ class View {
 	}
 
 	bindTranslator() {
-  	let input;
+  	// let input;
 
-  	this.commandLine.keyup((val) => {
-			if (!this.currentCell.children.length) {
-				input = this.createElement('input', 'input-item');
-				input.type = 'text';
-				this.currentCell.append(input);
-			}
-
-			input.value = val;
-
-			input.addEventListener('focus', (e) => {
-				// this.setActive(e);
-			});
-
-			input.addEventListener('keyup', () => {
-				// delete item
-				if (event.keyCode === 46) {
-					this.currentCell.removeChild(this.currentCell.lastChild);
-					return;
-				}
-				this.commandLine.setVal(input.value);
-			});
-
-			input.addEventListener('blur', () => {
-				if (input.value === '') {
-					this.commandLine.setVal('');
-					this.currentCell.removeChild(this.currentCell.lastChild);
-				}
-			});
-		});
+  	// this.commandLine.keyup((val) => {
+		// 	if (!this.currentCell.children.length) {
+		// 		input = this.createElement('input', 'input-item');
+		// 		input.type = 'text';
+		// 		this.currentCell.append(input);
+		// 	}
+		//
+		// 	input.value = val;
+		//
+		// 	input.addEventListener('focus', (e) => {
+		// 		// this.setActive(e);
+		// 	});
+		//
+		// 	input.addEventListener('keyup', () => {
+		// 		// delete item
+		// 		if (event.keyCode === 46) {
+		// 			this.currentCell.removeChild(this.currentCell.lastChild);
+		// 			return;
+		// 		}
+		// 		this.commandLine.setVal(input.value);
+		// 	});
+		//
+		// 	input.addEventListener('blur', () => {
+		// 		if (input.value === '') {
+		// 			this.commandLine.setVal('');
+		// 			this.currentCell.removeChild(this.currentCell.lastChild);
+		// 		}
+		// 	});
+		// });
 	}
 }
