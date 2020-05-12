@@ -1,4 +1,4 @@
-class Navigator {
+class Navigation {
   constructor() {
     this.navigator = document.createElement('input');
     this.navigator.setAttribute('id', 'column-search');

@@ -9,20 +9,17 @@ class View {
 	constructor(app) {
 		this.app = this.getElement(app);
 
-		this.commandLine = this.createElement('div', 'input-group');
-		this.navigator = new Navigator();
-		this.inputMirror = this.createElement('input');
-
-		this.inputMirror.type = 'text';
-		this.inputMirror.setAttribute('id', 'mirror');
+		this.inputGroup = this.createElement('div', 'input-group');
+		this.navigator = new Navigation();
+		this.commandLine = new CommandLine();
 
 		this.table = this.createElement('table');
 		this.thead = this.createElement('thead');
 		this.tbody = this.createElement('tbody');
 
-		this.commandLine.append(this.navigator.getComponent(), this.inputMirror);
+		this.inputGroup.append(this.navigator.getComponent(), this.commandLine.getComponent());
 		this.table.append(this.thead, this.tbody);
-		this.app.append(this.commandLine, this.table);
+		this.app.append(this.inputGroup, this.table);
 	}
 
 	appendRaw = () => {
@@ -136,7 +133,7 @@ class View {
   		input.focus();
 
 			input.addEventListener('focus', () => {
-				this.inputMirror.value = input.value;
+				this.commandLine.setVal(input.value);
 				this.setActive(e);
 			});
 
@@ -146,11 +143,11 @@ class View {
 					e.target.removeChild(e.target.lastChild);
 					return;
 				}
-				this.inputMirror.value = input.value;
+				this.commandLine.setVal(input.value);
 			});
 
   		input.addEventListener('blur', () => {
-				this.inputMirror.value = '';
+				this.commandLine.setVal('');
 
 				if (input.value === '') {
 					e.target.removeChild(e.target.lastChild);
