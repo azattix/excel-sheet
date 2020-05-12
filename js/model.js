@@ -5,10 +5,9 @@
  */
 class Model {
   constructor() {
-    this.maxColSize = 100;
-    this.maxRowSize = 100;
-    this.colSize = 20;
-    this.rowSize = 30;
+  	this.maxSize = 100;
+    this.colSize = Math.ceil(window.innerWidth / 70);
+    this.rowSize = Math.ceil(window.innerHeight / 23);
     this.cellWidth = 70;
     this.cellHeight = 23;
     this.commitX = this.cellWidth;
@@ -105,7 +104,7 @@ class Model {
    */
   resizeSheet({ x, y }) {
     // horizontal scroll
-    if ((-x / this.commitX) >= 1 && this.colSize <= this.maxColSize) {
+    if ((-x / this.commitX) >= 1 && this.colSize <= this.maxSize) {
       this.$.appendColTitle(this.convertToTitle(++this.colSize));
       this.$.appendCols();
       this.commitX += this.cellWidth;
@@ -118,7 +117,7 @@ class Model {
     }
 
     // vertical scroll
-    if ((-y / this.commitY) >= 1 && this.rowSize <= this.maxRowSize) {
+    if ((-y / this.commitY) >= 1 && this.rowSize <= this.maxSize) {
       this.$.appendRaw();
       for (let j = 1; j <= this.colSize+1; j++) { // +1 for extra cell for numbers
         this.$.appendCol();
