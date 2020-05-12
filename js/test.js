@@ -2,7 +2,7 @@ function isString(val) {
   return typeof val === 'string';
 }
 
-function isNumber(v) {
+function isNumber(val) {
   return typeof val === 'number';
 }
 

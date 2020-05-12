@@ -34,6 +34,7 @@ th:not(:first-child) {
   max-height: 23px;
   max-width: 70px;
   white-space: nowrap;
+  overflow: hidden;
 }
 
 table thead {

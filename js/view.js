@@ -20,6 +20,10 @@ class View {
 		this.inputGroup.append(this.navigator.getComponent(), this.commandLine.getComponent());
 		this.table.append(this.thead, this.tbody);
 		this.app.append(this.inputGroup, this.table);
+
+		this.rowIndex = 0;
+		this.colIndex = 1;
+		this.currentCell = null;
 	}
 
 	appendRaw = () => {
@@ -68,7 +72,7 @@ class View {
 		this.thead.childNodes[col].classList.add('active-cell');
 		this.tbody.childNodes[row].children[0].classList.add('active-cell');
 		this.tbody.childNodes[row].children[col].classList.add('active-cell');
-		// this.activeCell = this.tbody.childNodes[row].children[col];
+		this.currentCell = this.tbody.childNodes[row].children[col];
 	};
 
 	disActiveCells = () => {
@@ -99,7 +103,12 @@ class View {
 			let colTitle = this.thead.childNodes[e.target.cellIndex];
 			let rowNumber = e.target.parentElement.firstElementChild;
 
+			this.rowIndex = e.target.parentElement.rowIndex;
+			this.colIndex = e.target.cellIndex;
+			this.currentCell = this.tbody.childNodes[this.rowIndex].childNodes[this.colIndex];
+
 			this.navigator.setVal(colTitle.textContent + rowNumber.textContent);
+			this.commandLine.setVal('');
 
 			this.disActiveCells();
 
@@ -107,12 +116,12 @@ class View {
 			rowNumber.classList.add('active-cell');
 			colTitle.classList.add('active-cell');
 		}
+
+		if (e.target.tagName === 'INPUT') {
+			this.commandLine.setVal(e.target.value);
+		}
 	};
 
-	/**
-	 * On scroll change the sheet columns size
-	 * @param handle
-	 */
   bindSheetResize(handle) {
   	window.addEventListener('scroll', () => {
   		handle(this.table.getBoundingClientRect());
@@ -133,7 +142,6 @@ class View {
   		input.focus();
 
 			input.addEventListener('focus', () => {
-				this.commandLine.setVal(input.value);
 				this.setActive(e);
 			});
 
@@ -141,14 +149,13 @@ class View {
 				// delete item
 				if (event.keyCode === 46) {
 					e.target.removeChild(e.target.lastChild);
+					this.commandLine.setVal('');
 					return;
 				}
 				this.commandLine.setVal(input.value);
 			});
 
   		input.addEventListener('blur', () => {
-				this.commandLine.setVal('');
-
 				if (input.value === '') {
 					e.target.removeChild(e.target.lastChild);
 				}
@@ -159,5 +166,39 @@ class View {
 	bindNavigation(handle) {
 		this.navigator.click();
 		this.navigator.navigate(handle);
+	}
+
+	bindTranslator() {
+  	let input;
+
+  	this.commandLine.keyup((val) => {
+			if (!this.currentCell.children.length) {
+				input = this.createElement('input', 'input-item');
+				input.type = 'text';
+				this.currentCell.append(input);
+			}
+
+			input.value = val;
+
+			input.addEventListener('focus', (e) => {
+				// this.setActive(e);
+			});
+
+			input.addEventListener('keyup', () => {
+				// delete item
+				if (event.keyCode === 46) {
+					this.currentCell.removeChild(this.currentCell.lastChild);
+					return;
+				}
+				this.commandLine.setVal(input.value);
+			});
+
+			input.addEventListener('blur', () => {
+				if (input.value === '') {
+					this.commandLine.setVal('');
+					this.currentCell.removeChild(this.currentCell.lastChild);
+				}
+			});
+		});
 	}
 }

@@ -29,6 +29,7 @@ class Controller {
 		this.view.bindNavigation(this.onNavigated);
 		this.view.bindSetActiveCell();
 		this.view.bindDoubleClick();
+		this.view.bindTranslator();
 	}
 
 	onSheetResized = x => {

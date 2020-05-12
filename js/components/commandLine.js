@@ -12,4 +12,14 @@ class CommandLine {
   setVal(val) {
     this.input.value = val;
   }
+
+  getVal() {
+    return this.input.value;
+  }
+
+  keyup(handle) {
+    this.input.addEventListener('keyup', () => {
+      handle(this.input.value);
+    })
+  }
 }
