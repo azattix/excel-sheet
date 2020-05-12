@@ -10,12 +10,9 @@ class View {
 		this.app = this.getElement(app);
 
 		this.commandLine = this.createElement('div', 'input-group');
-		this.inputSearch = this.createElement('input');
+		this.navigator = new Navigator();
 		this.inputMirror = this.createElement('input');
 
-		this.inputSearch.type = 'text';
-		this.inputSearch.value = 'A1';
-		this.inputSearch.setAttribute('id', 'column-search');
 		this.inputMirror.type = 'text';
 		this.inputMirror.setAttribute('id', 'mirror');
 
@@ -23,7 +20,7 @@ class View {
 		this.thead = this.createElement('thead');
 		this.tbody = this.createElement('tbody');
 
-		this.commandLine.append(this.inputSearch, this.inputMirror);
+		this.commandLine.append(this.navigator.getComponent(), this.inputMirror);
 		this.table.append(this.thead, this.tbody);
 		this.app.append(this.commandLine, this.table);
 	}
@@ -105,7 +102,7 @@ class View {
 			let colTitle = this.thead.childNodes[e.target.cellIndex];
 			let rowNumber = e.target.parentElement.firstElementChild;
 
-			this.inputSearch.value = colTitle.textContent + rowNumber.textContent;
+			this.navigator.setVal(colTitle.textContent + rowNumber.textContent);
 
 			this.disActiveCells();
 
@@ -127,23 +124,6 @@ class View {
 
 	bindSetActiveCell() {
 		this.tbody.addEventListener('click', this.setActive);
-	}
-
-	bindMirror() {
-  	// let input;
-		//
-  	// this.inputMirror.addEventListener('keyup', () => {
-		// 	if (this.activeCell.children.length === 0) {
-		// 		input = this.createElement('input', 'input-item');
-		// 		input.type = 'text';
-		// 		this.activeCell.append(input);
-		// 	}
-		// 	input.value = this.inputMirror.value;
-		// });
-		//
-		// this.inputMirror.addEventListener('blur', () => {
-		// 	input = null;
-		// });
 	}
 
 	bindDoubleClick() {
@@ -179,23 +159,8 @@ class View {
 		})
 	}
 
-	bindColumnSearch(handle) {
-		// Select all text inside of input
-		this.inputSearch.addEventListener('click', () => {
-			this.inputSearch.setSelectionRange(0, this.inputSearch.value.length);
-		});
-
-		this.inputSearch.addEventListener("keyup", (e) => {
-			e.preventDefault();
-
-			// "Enter" key on the keyboard
-		  if (e.keyCode === 13) {
-				if (!this.inputSearch.value) return;
-
-				this.inputSearch.value = this.inputSearch.value.toUpperCase();
-		    handle(this.inputSearch.value);
-		    this.inputSearch.blur();
-		  }
-		});
+	bindNavigation(handle) {
+		this.navigator.click();
+		this.navigator.navigate(handle);
 	}
 }

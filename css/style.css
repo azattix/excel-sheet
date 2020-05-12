@@ -16,6 +16,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 31px;
 }
 
 table,
@@ -75,6 +76,10 @@ tr td:first-child {
 }
 
 .input-group {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
   padding-top: 4px;
   padding-bottom: 4px;
   border-bottom: 1px solid #8a8d8e;

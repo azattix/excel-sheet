@@ -26,18 +26,17 @@ class Controller {
 
 		this.model.setInitialSheet();
 		this.view.bindSheetResize(this.onSheetResized);
-		this.view.bindColumnSearch(this.onColumnSearch);
+		this.view.bindNavigation(this.onNavigated);
 		this.view.bindSetActiveCell();
 		this.view.bindDoubleClick();
-		this.view.bindMirror();
 	}
 
 	onSheetResized = x => {
     this.model.resizeSheet(x);
   };
 
-  onColumnSearch = s => {
-  	this.model.onSearchColumn(s);
+  onNavigated = s => {
+  	this.model.onNavigate(s);
 	};
 }
 

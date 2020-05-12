@@ -6,10 +6,10 @@
 class Model {
   constructor() {
   	this.maxSize = 100;
-    this.colSize = Math.ceil(window.innerWidth / 70);
-    this.rowSize = Math.ceil(window.innerHeight / 23);
     this.cellWidth = 70;
     this.cellHeight = 23;
+    this.colSize = Math.ceil(window.innerWidth / this.cellWidth);
+    this.rowSize = Math.ceil(window.innerHeight / this.cellHeight);
     this.commitX = this.cellWidth;
     this.commitY = this.cellHeight;
   }
@@ -59,19 +59,22 @@ class Model {
     return columnNumber;
   }
 
-  onSearchColumn(s) {
-    if (Test.isShortLength(s, 2)) return;
-    if (!Test.isAlphanumeric(s)) return;
+  onNavigate(s) {
+    if ( !isAlphanumeric( s.trim() ) ) return;
 
-    let alphaNumericArray = s.split(/([0-9]+)/);
+    // split numbers and letters from the string into array
+    let arr = s.split(/([0-9]+)/);
 
-    if (Test.isEmpty(alphaNumericArray[0])) return;
-    if (Test.isEmpty(alphaNumericArray[1])) return;
-    if (!Test.isEmpty(alphaNumericArray[2])) return;
-    if (alphaNumericArray[1] < '1') return;
+    if ( isEmpty(arr[0])  
+    	|| isEmpty(arr[1]) 
+  		|| !isEmpty(arr[2])
+		) return;
 
-    let col = this.titleToNumber(alphaNumericArray[0].toUpperCase());
-    let row = alphaNumericArray[1] - 1;
+    // Lexicographical order lower
+    if (arr[1] < '1') return;
+
+    let col = this.titleToNumber(arr[0]);
+    let row = arr[1] - 1;
 
     this.$.setActiveCell(col, row);
   }
