@@ -14,14 +14,21 @@ class Navigation {
     return this.navigator;
   }
 
-  click() {
+  click(handle) {
     this.navigator.addEventListener('click', function() {
       // Select all text inside of input
       this.setSelectionRange(0, this.value.length);
+      handle();
     });
   }
 
-  navigate(handle) {
+  blur(handle) {
+    this.navigator.addEventListener('blur', function() {
+      handle();
+    });
+  }
+
+  navigate(handle, isTyping) {
     this.navigator.addEventListener("keyup", function(e) {
       e.preventDefault();
 
@@ -33,6 +40,7 @@ class Navigation {
 
         this.value = this.value.toUpperCase();
         handle(this.value);
+        isTyping();
         this.blur();
       }
     });

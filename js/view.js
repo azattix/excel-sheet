@@ -195,8 +195,17 @@ class View {
 	}
 
 	bindNavigation(handle) {
-		this.navigator.click();
-		this.navigator.navigate(handle);
+		this.navigator.click(() => {
+			this.isTyping = true;
+		});
+
+		this.navigator.blur(() => {
+			this.isTyping = false;
+		});
+
+		this.navigator.navigate(handle, () => {
+			this.isTyping = false;
+		});
 	}
 
 	onEditing() {
