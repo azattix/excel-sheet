@@ -8,6 +8,7 @@
 class View {
 	constructor(app) {
 		this.app = this.getElement(app);
+		this.body = this.getElement('body');
 
 		this.inputGroup = this.createElement('div', 'input-group');
 		this.navigator = new Navigation();
@@ -24,6 +25,7 @@ class View {
 		this.rowIndex = 0;
 		this.colIndex = 1;
 		this.currentCell = null;
+		this.isTyping = false;
 	}
 
 	appendRaw = () => {
@@ -74,6 +76,8 @@ class View {
 		this.tbody.childNodes[row].children[col].classList.add('active-cell');
 		this.currentCell = this.tbody.childNodes[row].children[col];
 		this.commandLine.setVal(this.currentCell.textContent);
+		this.colIndex = col;
+		this.rowIndex = row;
 	};
 
 	disActiveCells = () => {
@@ -125,6 +129,61 @@ class View {
 			this.commandLine.setVal(elem.textContent);
 	};
 
+	addInput(parent) {
+		const value = this.createElement('span', 'hide');
+		const input = this.createElement('input', 'input-item');
+		input.type = 'text';
+
+		const quit = () => {
+			if (input.value === '') {
+				parent.textContent = '';
+			} else {
+				input.type = 'hidden';
+				value.textContent = input.value;
+				value.classList.remove('hide');
+			}
+
+			this.isTyping = false;
+		};
+
+		parent.append(value, input);
+		input.focus();
+
+		input.addEventListener('keyup', (event) => {
+			if (event.keyCode === 13) { // enter
+				quit();
+				return;
+			}
+
+			this.commandLine.setVal(input.value);
+		});
+
+		input.addEventListener('blur', () => {
+			quit();
+		});
+	}
+
+	startTyping(e) {
+		let elem = e.target ? e.target: e;
+
+		if (this.isTyping) {
+			if ( hasChildren(elem) ) {
+				elem.textContent = '';
+			}
+
+			this.addInput(elem);
+		} else if (!hasChildren(elem) && hasTag(elem, 'TD')) {
+			this.isTyping = true;
+			this.addInput(elem);
+		} else if ( hasTag(elem,'SPAN') ) {
+			elem.classList.add('hide');
+			elem.nextElementSibling.type = 'text';
+		} else if ( hasTag(e, 'TD')) {
+			elem.firstElementChild.classList.add('hide');
+			elem.lastElementChild.type = 'text';
+		}
+	}
+
   bindSheetResize(handle) {
   	window.addEventListener('scroll', () => {
   		handle(this.table.getBoundingClientRect());
@@ -135,77 +194,24 @@ class View {
 		this.tbody.addEventListener('click', this.setActive);
 	}
 
-	bindDoubleClick() {
-  	this.tbody.addEventListener('dblclick', (e) => {
-			if (!hasChildren(e) && hasTag(e, 'TD')) {
-				let value = this.createElement('span', 'hide');
-				let input = this.createElement('input', 'input-item');
-				input.type = 'text';
-
-				e.target.append(value, input);
-
-				input.focus();
-
-				input.addEventListener('keyup', () => {
-					this.commandLine.setVal(input.value);
-				});
-
-				input.addEventListener('blur', () => {
-					if (isEmpty(input.value)) {
-						e.target.textContent = '';
-					} else {
-						input.type = 'hidden';
-						value.textContent = input.value;
-						value.classList.remove('hide');
-					}
-				});
-
-			} else if ( hasTag(e,'SPAN') ) {
-				e.target.classList.add('hide');
-				e.target.nextElementSibling.type = 'text';
-			} else if ( hasTag(e, 'TD')) {
-				e.target.firstElementChild.classList.add('hide');
-				e.target.lastElementChild.type = 'text';
-			}
-		})
-	}
-
 	bindNavigation(handle) {
 		this.navigator.click();
 		this.navigator.navigate(handle);
 	}
 
-	bindTranslator() {
-  	// let input;
+	onEditing() {
+		this.tbody.addEventListener('dblclick', (e) => {
+			this.startTyping(e);
+			this.isTyping = true;
+		});
+	}
 
-  	// this.commandLine.keyup((val) => {
-		// 	if (!this.currentCell.children.length) {
-		// 		input = this.createElement('input', 'input-item');
-		// 		input.type = 'text';
-		// 		this.currentCell.append(input);
-		// 	}
-		//
-		// 	input.value = val;
-		//
-		// 	input.addEventListener('focus', (e) => {
-		// 		// this.setActive(e);
-		// 	});
-		//
-		// 	input.addEventListener('keyup', () => {
-		// 		// delete item
-		// 		if (event.keyCode === 46) {
-		// 			this.currentCell.removeChild(this.currentCell.lastChild);
-		// 			return;
-		// 		}
-		// 		this.commandLine.setVal(input.value);
-		// 	});
-		//
-		// 	input.addEventListener('blur', () => {
-		// 		if (input.value === '') {
-		// 			this.commandLine.setVal('');
-		// 			this.currentCell.removeChild(this.currentCell.lastChild);
-		// 		}
-		// 	});
-		// });
+	onTyping() {
+		this.body.addEventListener('keydown', (e) => {
+			if (!this.isTyping && e.keyCode !== 13) {
+				this.isTyping = true;
+				this.startTyping(this.currentCell);
+			}
+		})
 	}
 }

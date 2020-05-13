@@ -17,9 +17,11 @@ function isAlphanumeric(s) {
 }
 
 function hasChildren(e) {
-  return e.target.children.length !== 0;
+  let elem = e.target ? e.target: e;
+  return elem.children.length !== 0;
 }
 
 function hasTag(e, tag) {
-  return e.target.tagName === tag;
+  let elem = e.target ? e.target: e;
+  return elem.tagName === tag;
 }

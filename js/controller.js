@@ -28,8 +28,8 @@ class Controller {
 		this.view.bindSheetResize(this.onSheetResized);
 		this.view.bindNavigation(this.onNavigated);
 		this.view.bindSetActiveCell();
-		this.view.bindDoubleClick();
-		this.view.bindTranslator();
+		this.view.onEditing();
+		this.view.onTyping();
 	}
 
 	onSheetResized = x => {
