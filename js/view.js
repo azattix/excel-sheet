@@ -155,6 +155,11 @@ class View {
 				return;
 			}
 
+			if (event.keyCode === 9) { // tab
+				quit();
+				return;
+			}
+
 			this.commandLine.setVal(input.value);
 		});
 
@@ -217,7 +222,24 @@ class View {
 
 	onTyping() {
 		this.body.addEventListener('keydown', (e) => {
-			if (!this.isTyping && e.keyCode !== 13) {
+			// enter
+			if (e.keyCode === 13) {
+				this.setActiveCell(this.colIndex, this.rowIndex + 1);
+				return;
+			}
+
+			// tab
+			if (e.keyCode === 9) {
+				e.preventDefault();
+				this.setActiveCell(this.colIndex + 1, this.rowIndex);
+				return;
+			}
+
+			if (e.keyCode === 49) {
+				return;
+			}
+
+			if (!this.isTyping) {
 				this.isTyping = true;
 				this.startTyping(this.currentCell);
 			}

@@ -18,7 +18,7 @@ class CommandLine {
   }
 
   keyup(handle) {
-    this.input.addEventListener('keyup', () => {
+    this.input.addEventListener('keyup', (e) => {
       handle(this.input.value);
     })
   }
