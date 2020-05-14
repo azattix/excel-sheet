@@ -23,7 +23,7 @@ function ready() {
 		.then(script => loadScript("js/components/navigation.js"))
 		.then(script => loadScript("js/components/commandLine.js"))
 		.then(script => loadScript("js/view.js"))
-		.then(script => loadScript("js/test.js"))
+		.then(script => loadScript("js/helpers.js"))
 		.then(script => loadScript("js/controller.js"))
 		.then(script => {
 			// scripts are loaded, we can use functions declared there

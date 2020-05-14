@@ -214,6 +214,8 @@ class View {
 	}
 
 	onEditing() {
+		resizableGrid(this.table);
+
 		this.tbody.addEventListener('dblclick', (e) => {
 			this.startTyping(e);
 			this.isTyping = true;
@@ -232,10 +234,6 @@ class View {
 			if (e.keyCode === 9) {
 				e.preventDefault();
 				this.setActiveCell(this.colIndex + 1, this.rowIndex);
-				return;
-			}
-
-			if (e.keyCode === 49) {
 				return;
 			}
 
