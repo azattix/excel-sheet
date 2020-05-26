@@ -3,6 +3,10 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.listen(4000, () => {
-  console.log('App listening on port 4000')
+app.get('/', function(req, res){
+	res.sendFile(__dirname + '/public/index.html');
+});
+
+app.listen(5000, () => {
+  console.log('App listening on port 5000')
 });
