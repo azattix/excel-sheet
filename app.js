@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+const router = express.Router();
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res){
-	res.sendFile(__dirname + '/public/index.html');
+router.get('/',function(req,res){
+  res.sendFile(path.join(__dirname+'/public/index.html'));
 });
 
-app.listen(5000, () => {
-  console.log('App listening on port 5000')
-});
+//add the router
+app.use('/', router);
+app.listen(3000);
+
+console.log('Running at Port 3000');
