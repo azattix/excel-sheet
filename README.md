@@ -2,7 +2,7 @@
 
 Minimalistic excel. Used MVC pattern, ES6 in plain Javascript.
 
-![picture alt](img/excel.png "Excel background")
+![picture alt](public/img/excel.png "Excel background")
 
 ### Installation
 ```
