@@ -76,6 +76,7 @@ class View {
 		this.tbody.childNodes[row].children[col].classList.add('active-cell');
 		this.currentCell = this.tbody.childNodes[row].children[col];
 		this.commandLine.setVal(this.currentCell.textContent);
+		this.navigator.setVal(this.thead.childNodes[col].textContent + (row + 1));
 		this.colIndex = col;
 		this.rowIndex = row;
 	};
