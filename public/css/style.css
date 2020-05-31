@@ -76,7 +76,11 @@ tr td:first-child {
 }
 
 #mirror {
-  width: 90%;
+  width: 85%;
+}
+
+#save-button {
+  width: 5%;
 }
 
 .input-group {

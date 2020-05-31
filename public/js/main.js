@@ -25,6 +25,7 @@
 			.then(() => loadScript("js/components/commandLine.js"))
 			.then(() => loadScript("js/components/saveButton.js"))
 			.then(() => loadScript("js/view.js"))
+			.then(() => loadScript("js/resizableGrid.js"))
 			.then(() => loadScript("js/helpers.js"))
 			.then(() => loadScript("js/controller.js"))
 			.then(() => {
