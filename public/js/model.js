@@ -5,6 +5,7 @@
  */
 class Model {
   constructor() {
+    this.items = [];
   	this.maxSize = 100;
     this.cellWidth = 70;
     this.cellHeight = 23;
@@ -12,6 +13,12 @@ class Model {
     this.rowSize = Math.ceil(window.innerHeight / this.cellHeight);
     this.commitX = this.cellWidth;
     this.commitY = this.cellHeight;
+  }
+
+  saveItems(item) {
+    console.log(item)
+    // if (!item) return;
+    // this.items.push(item);
   }
 
   /**

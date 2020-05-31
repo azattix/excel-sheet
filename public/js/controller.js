@@ -27,6 +27,7 @@ class Controller {
 		this.model.setInitialSheet();
 		this.view.bindSheetResize(this.onSheetResized);
 		this.view.bindNavigation(this.onNavigated);
+		this.view.bindSave(this.onSave);
 		this.view.bindSetActiveCell();
 		this.view.onEditing();
 		this.view.onTyping();
@@ -38,6 +39,10 @@ class Controller {
 
   onNavigated = s => {
   	this.model.onNavigate(s);
+	};
+
+	onSave = i => {
+		this.model.saveItems(i);
 	};
 }
 

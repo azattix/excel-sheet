@@ -13,12 +13,17 @@ class View {
 		this.inputGroup = this.createElement('div', 'input-group');
 		this.navigator = new Navigation();
 		this.commandLine = new CommandLine();
+		this.saveButton = new SaveButton();
 
 		this.table = this.createElement('table');
 		this.thead = this.createElement('thead');
 		this.tbody = this.createElement('tbody');
 
-		this.inputGroup.append(this.navigator.getComponent(), this.commandLine.getComponent());
+		this.inputGroup.append(
+			this.navigator.getComponent(), 
+			this.commandLine.getComponent(),
+			this.saveButton.getComponent()
+		);
 		this.table.append(this.thead, this.tbody);
 		this.app.append(this.inputGroup, this.table);
 
@@ -26,6 +31,8 @@ class View {
 		this.colIndex = 1;
 		this.currentCell = null;
 		this.isTyping = false;
+		this.items = [];
+		this.item;
 	}
 
 	appendRaw = () => {
@@ -243,5 +250,9 @@ class View {
 				this.startTyping(this.currentCell);
 			}
 		})
+	}
+
+	bindSave(handle) {
+		this.saveButton.save(handle);
 	}
 }
