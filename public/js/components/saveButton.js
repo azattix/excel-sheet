@@ -15,3 +15,5 @@ class SaveButton {
   	})
   }
 }
+
+export default SaveButton;

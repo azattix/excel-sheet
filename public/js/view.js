@@ -1,3 +1,9 @@
+import CommandLine from './components/commandLine.js';
+import Navigation from './components/navigation.js';
+import SaveButton from './components/saveButton.js';
+import resizableGrid from './lib/resizableGrid.js';
+import ViewDom from './lib/ViewDom.js';
+
 /**
  * @class View
  *
@@ -5,8 +11,9 @@
  *
  * @param app
  */
-class View {
+class View extends ViewDom {
 	constructor(app) {
+		super();
 		this.app = this.getElement(app);
 		this.body = this.getElement('body');
 
@@ -95,18 +102,6 @@ class View {
 			active.classList.remove('active-cell')
 		});
 	};
-
-	createElement(tag, className) {
-    const element = document.createElement(tag);
-
-    if (className) element.classList.add(className);
-
-    return element;
-  }
-
-	getElement(selector) {
-    return document.querySelector(selector);
-  }
 
 	setActive = (e) => {
 		let elem = e.target;
@@ -256,3 +251,5 @@ class View {
 		this.saveButton.save(handle);
 	}
 }
+
+export default View;

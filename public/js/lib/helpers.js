@@ -7,8 +7,7 @@ function isNumber(val) {
 }
 
 function isEmpty(v) {
-  if (isString(v))
-    return v === '';
+  return v === '';
 }
 
 function isAlphanumeric(s) {

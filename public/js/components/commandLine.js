@@ -23,3 +23,5 @@ class CommandLine {
     })
   }
 }
+
+export default CommandLine;
